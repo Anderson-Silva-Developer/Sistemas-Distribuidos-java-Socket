@@ -7,6 +7,8 @@ import javafx.scene.layout.Pane;
 import move.MovePlayer;
 import player.Player;
 
+import java.io.IOException;
+
 public class GameController {
     @FXML
     private Label player1Name;
@@ -35,14 +37,24 @@ public class GameController {
     private Button btn1;
     @FXML
     private Button btn2;
-    Player player=new Player();
+    private static Player player;
+
+    public GameController() throws IOException {
+    }
+
     @FXML
     public  void  initialize(){
-         iniGame();
+        try {
+            player=new Player();
+            iniGame();
+        } catch (Exception e) {
+            System.out.println("Erro "+e.getMessage());
+        }
+
 
     }
     @FXML
-    public void play(){
+    public void play() throws IOException {
         play01.setOpacity(1);
         play02.setOpacity(1);
         login.setVisible(false);
@@ -59,6 +71,8 @@ public class GameController {
         player.config();
         player.setMove(new MovePlayer(controls, player));
         player.getMove().move();
+
+
         arena.getChildren().add(player.getSensor());
     }
     @FXML

@@ -7,13 +7,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import player.Player;
 
+import java.io.IOException;
+
+
 public class MovePlayer {
     private TextField controls;
     private ImageView avatar;
-    private  Player player;
+    private static Player player;
     private Circle sensor=new Circle();
 
     public MovePlayer(TextField controls, Player player) {
+        System.out.println("move "+player);
         this.player=player;
         this.sensor=player.getSensor();
         this.controls = controls;
@@ -21,7 +25,8 @@ public class MovePlayer {
 
     }
 
-    public  void move(){
+    public  void move() {
+
         controls.onKeyPressedProperty().setValue(keyEvent -> {
 
                     if(keyEvent.getCode()== KeyCode.UP && avatar.getLayoutY()>0.0){
@@ -50,17 +55,25 @@ public class MovePlayer {
     }
 
     private void UpdateScore(int score) {
+        System.out.println("comunicação "+this.player.getComunication());
         player.setScore(player.getScore()+score);
         player.getScoreAtual().setText(""+player.getScore());
+
     }
 
-    public void UpdateSensor(){
+    public void UpdateSensor() {
         sensor.setCenterX(this.avatar.getLayoutX()+25);
         sensor.setCenterY(this.avatar.getLayoutY()+30);
-        if(avatar.getLayoutX()==500){
+        try {
+            this.player.getComunication().send(this.player);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(avatar.getLayoutY()==500 &&avatar.getLayoutX()==500) {
             sensor.setFill(Color.GREEN);
             UpdateScore(1);
-        }else { sensor.setFill(Color.TRANSPARENT);}
+        }
+        else { sensor.setFill(Color.TRANSPARENT);}
 
-    }
+   }
 }

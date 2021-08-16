@@ -1,21 +1,30 @@
 package player;
 
-import comunication.Cominication;
+import comunication.Comunication;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import move.MovePlayer;
 
+import java.io.IOException;
+
+
 public class Player {
     private Label name;
-    private int[] position={0,0};
+    private double[] position={0,0};
     private int score=5;
     private Circle sensor=new Circle();
-    private Cominication comunication;
+    private static Comunication comunication;
     private MovePlayer move;
     private ImageView avatar;
     private Label scoreAtual;
+
+    public Comunication getComunication() {return comunication; }
+
+    public void setComunication(Comunication comunication) {
+        this.comunication = comunication;
+    }
 
     public Label getScoreAtual() {
         return scoreAtual;
@@ -41,13 +50,12 @@ public class Player {
         this.name = name;
     }
 
-    public int[] getPosition() {
+    public double[] getPosition() {
+        position[0]=getAvatar().getLayoutX();
+        position[1]=getAvatar().getLayoutY();
         return position;
     }
 
-    public void setPosition(int[] position) {
-        this.position = position;
-    }
 
     public int getScore() {
         return score;
@@ -73,7 +81,7 @@ public class Player {
         this.avatar = avatar;
     }
 
-    public Player() {
+    public Player() throws IOException {
     }
     public void config(){
         scoreAtual.setText(""+getScore());
@@ -82,6 +90,12 @@ public class Player {
         sensor.setRadius(33.0f);
         sensor.setFill(Color.TRANSPARENT);
         sensor.setOpacity(0.3);
+        try {
+            comunication=new Comunication();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
