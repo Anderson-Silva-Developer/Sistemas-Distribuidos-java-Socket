@@ -1,4 +1,5 @@
 package server;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -8,7 +9,7 @@ public class ClienteServidor {
     String id;
     Socket socket;
 
-    public void init(){
+    public void init() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -21,17 +22,18 @@ public class ClienteServidor {
         }).start();
     }
 
-    public ClienteServidor(Socket socket){
+    public ClienteServidor(Socket socket) {
         this.socket = socket;
         init();
     }
 
     public void Send(String idDestino, String mensagem) throws IOException {
-//        if(Server.clientesConectados.size()>1) {
-            ClienteServidor cliente = Server.clientesConectados.get(idDestino);
-            cliente.white(mensagem);
-//        }
+        // if(Server.clientesConectados.size()>1) {
+        ClienteServidor cliente = Server.clientesConectados.get(idDestino);
+        cliente.white(mensagem);
+        // }
     }
+
     public void white(String mensagem) throws IOException {
         PrintStream saida = new PrintStream(this.socket.getOutputStream());
         saida.println(mensagem);
@@ -55,10 +57,7 @@ public class ClienteServidor {
             System.out.println("PARA: " + status[0]);
             System.out.println("MENSAGEM: " + status[1]);
 
-
-
+        }
     }
-    }
-
 
 }
