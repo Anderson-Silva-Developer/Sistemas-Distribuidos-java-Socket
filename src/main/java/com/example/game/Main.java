@@ -12,7 +12,7 @@ public class Main extends javafx.application.Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setResizable(false);
-        stage.setTitle("Game!");
+        stage.setTitle("GAME BUMM !");
         stage.setScene(scene);
 
         stage.show();
