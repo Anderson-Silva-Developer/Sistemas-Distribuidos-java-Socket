@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Server {
-    public static HashMap<String,ClienteServidor> clientesConectados = new HashMap<>();
+    public static  HashMap<String,ClienteServidor> clientesConectados = new HashMap<>();
     public static int[] rewardPositive=new int[2];
     public static int[] rewardNegative=new int[2];
     public  static  Recompensa r=new Recompensa();

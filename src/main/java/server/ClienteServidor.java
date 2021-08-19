@@ -1,4 +1,6 @@
 package server;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ public class ClienteServidor {
     String id;
     Socket socket;
     Distance distance=new Distance();
+    static  boolean jogando=false;
 
     public void init(){
 
@@ -29,11 +32,14 @@ public class ClienteServidor {
     public ClienteServidor(Socket socket){
         this.socket = socket;
         //iniciar thred para escutar eventos de entrada de mensagem
-        init();
+
+            init();
+
     }
     //tratar mensagem recebida
     public void Send(String id,String mensagem) throws IOException {
         ClienteServidor cliente = Server.clientesConectados.get(id);
+
         if(Server.clientesConectados.size()==1){
             //o jogo não está liberado!!
          SendStatus(id,"off#");
@@ -72,21 +78,30 @@ public class ClienteServidor {
             String texto = entrada.nextLine();
             // id irá vim no seguinte formato -> meuid:'aqui_ira_ficar_o_ID'
             if (texto.contains("meuid#")) {
-                this.id = texto.substring("meuid#".length());
-                //adicionar o cliente no array de clientes conectados
+                 //adicionar o cliente no array de clientes conectados
                 //this.id = representa o id do cliente que vem como o nome do player
                 //this = representa adicionar o proprio cliente
-                Server.clientesConectados.put(this.id, this);
-                continue;
+
+                if(!Server.clientesConectados.containsKey(this.id) && Server.clientesConectados.size()<2){
+                    this.id = texto.substring("meuid#".length());
+                    Server.clientesConectados.put(this.id, this);
+                }
+
+                    continue;
             }
                 // mensagem irá vim no seguinte formato -> idDestino:mensagem
                 String status[] = texto.split("#");
-                Send(status[0], status[1]);//tratar mensagem
+                if(Server.clientesConectados.get(this.id)!=null) {
+                    Send(status[0], status[1]);//tratar mensagem
 //                System.out.println("DE: " + this.id);
 //                System.out.println("PARA: " + status[0]);
 //                System.out.println("MENSAGEM: " + status[1]);
+                }else {
+                    System.out.println("Apenas dois jogadores você não pode jogar!!");
 
-    }
+                }
+
+        }
     }
     //atualizar o status do player
     public  void UpdateStatus(ClienteServidor cliente,String msm ,int reward){
@@ -180,5 +195,6 @@ public class ClienteServidor {
 
 
     }
+
 
 }
